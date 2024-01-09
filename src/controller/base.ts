@@ -8,13 +8,13 @@ export class Controller <T, R> {
 
     constructor(service: Service<T,R>) { this.service = service }
 
-    async create (req: iRequestBody<T>, res: Response) {
+    create = async (req: iRequestBody<T>, res: Response) => {
         try {
             return res.json({ data: await this.service.create(req.body) })
         } catch (error) { this.errorResponse(error, res); }
     }
 
-    async get (req: Request, res: Response) {
+    get = async (req: Request, res: Response) => {
         try {
             return res.json({ data: await this.service.get() })
         } catch (error) { this.errorResponse(error, res); }
@@ -29,5 +29,5 @@ export class Controller <T, R> {
         return res.status(500).json({
             message: "Something went wrong, please contact with the support team."
         })
-}
+    }
 }
