@@ -2,6 +2,7 @@ import bodyParser from "body-parser";
 import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import { AppDataSource } from "./db/datasource";
+import { errors } from "celebrate";
 
 import userRouter from "./routers/user.routers";
 
@@ -19,6 +20,8 @@ api.use( (req: Request, res: Response) => res.json({
     API: process.env.API,
     VERSION: process.env.VERSION,
 }));
+
+api.use(errors())
 
 AppDataSource.initialize().catch(error => console.error(error));
 
