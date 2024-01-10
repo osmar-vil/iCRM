@@ -11,6 +11,9 @@ const envSchema = z.object({
 
     ADMINISTRATOR_EMAIL: z.string().email(),
     ADMINISTRATOR_PASSWORD: z.string().trim().min(8),
+
+    JWT_SECRET: z.string().min(32),
+    JWT_EXPIRES_TIME: z.string().min(1).transform( x => Number(x) ).default("1"),
 })
 
 const parse = envSchema.safeParse(process.env)

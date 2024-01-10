@@ -3,6 +3,8 @@ import { Service } from "../interfaces/service";
 import { ListResponse } from "../types/listTypes";
 import { UserRequest, UserResponse, authRequest } from "../types/userTypes";
 import bcryt from "bcrypt";
+import jwt from "jsonwebtoken";
+import { env } from "../validators/env.validator";
 
 export class UserService implements Service<UserRequest, UserResponse> {
     async create(data: UserRequest): Promise<UserResponse> {
@@ -34,13 +36,18 @@ export class UserService implements Service<UserRequest, UserResponse> {
     }
 
     async auth (data: authRequest) {
-        const { password } = await User.createQueryBuilder()
-        .select(["password"])
+        const { id, name, last_name, password } = await User.createQueryBuilder()
+        .select(["password", "id", "name", "last_name"])
         .where({ email: data.email })
         .getRawOne();
 
-        if ( await bcryt.compare(data.password, password) ) return "Token string"
-        else throw Error("Please check your email our password")
+        if ( await bcryt.compare(data.password, password) ) {
+            return jwt.sign(
+                { id, name, last_name },
+                env.JWT_SECRET,
+                { expiresIn: `${env.JWT_EXPIRES_TIME}h` }
+            );
+        } else throw Error("Please check your email our password")
     }
 
 }
