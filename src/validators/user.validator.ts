@@ -6,7 +6,14 @@ export class UserValidator {
             name: Joi.string().trim().required(),
             last_name: Joi.string().trim(),
             email: Joi.string().email().required(),
-            password: Joi.string().min(8).required(),
+            password: Joi.string().trim().min(8).required(),
+        }
+    })
+
+    auth = celebrate({
+        [Segments.BODY]: {
+            email: Joi.string().email().required(),
+            password: Joi.string().trim().min(8).required(),
         }
     })
 }

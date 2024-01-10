@@ -20,12 +20,14 @@ export class Controller <T, R> {
         } catch (error) { this.errorResponse(error, res); }
     }
 
-    private errorResponse (error: unknown, res: Response) {
+    errorResponse (error: unknown, res: Response) {
         if (error instanceof EntityNotFoundError)
             return res.status(404).json({
                 message: "Can not found any entity with that data provided."
             })
         
+        if (error instanceof Error) return res.json({ message: error.message })
+
         return res.status(500).json({
             message: "Something went wrong, please contact with the support team."
         })

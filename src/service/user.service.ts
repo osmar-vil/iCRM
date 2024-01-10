@@ -1,7 +1,8 @@
 import { User } from "../entity/user";
 import { Service } from "../interfaces/service";
 import { ListResponse } from "../types/listTypes";
-import { UserRequest, UserResponse } from "../types/userTypes";
+import { UserRequest, UserResponse, authRequest } from "../types/userTypes";
+import bcryt from "bcrypt";
 
 export class UserService implements Service<UserRequest, UserResponse> {
     async create(data: UserRequest): Promise<UserResponse> {
@@ -30,6 +31,16 @@ export class UserService implements Service<UserRequest, UserResponse> {
     }
     async delete(id: number, deleted_by: number): Promise<void> {
         await User.update(id, { deleted_at: () => "CURRENT_TIMESTAMP", deleted_by })
+    }
+
+    async auth (data: authRequest) {
+        const { password } = await User.createQueryBuilder()
+        .select(["password"])
+        .where({ email: data.email })
+        .getRawOne();
+
+        if ( await bcryt.compare(data.password, password) ) return "Token string"
+        else throw Error("Please check your email our password")
     }
 
 }
