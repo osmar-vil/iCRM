@@ -7,12 +7,3 @@ export type UserRequest = {
 }
 
 export type UserResponse = { id : number } & Omit<UserRequest, "password" | "user_id">
-
-export type authRequest = {
-    email: string;
-    password: string;
-}
-
-export type authResponse = {
-    token: string;
-}

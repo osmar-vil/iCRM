@@ -1,10 +1,11 @@
 import { User } from "../entity/user";
 import { Service } from "../interfaces/service";
 import { ListResponse } from "../types/listTypes";
-import { UserRequest, UserResponse, authRequest } from "../types/userTypes";
+import { UserRequest, UserResponse } from "../types/userTypes";
 import bcryt from "bcrypt";
 import jwt from "jsonwebtoken";
 import { env } from "../validators/env.validator";
+import { authRequest } from "../types/auth";
 
 export class UserService implements Service<UserRequest, UserResponse> {
     async create(data: UserRequest): Promise<UserResponse> {

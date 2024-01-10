@@ -6,12 +6,14 @@ import { errors } from "celebrate";
 import userRouter from "./routers/user.routers";
 import { env } from "./validators/env.validator";
 import { seeder } from "./db/seeder";
+import { authMiddleware } from "./middleware/jwtMiddleware";
 
 const api = express();
 
 api.use(bodyParser.json())
 api.use(bodyParser.urlencoded({ extended: true }))
 
+api.use(authMiddleware);
 api.use("/user", userRouter)
 
 api.use( (req: Request, res: Response) => res.json({

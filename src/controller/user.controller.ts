@@ -1,9 +1,9 @@
 import { Response } from "express";
 import { iRequestBody } from "../interfaces/express";
-import { UserRequest, UserResponse, authRequest } from "../types/userTypes";
+import { UserRequest, UserResponse } from "../types/userTypes";
 import { Controller } from "./base";
 import { UserService } from "../service/user.service";
-import { EntityNotFoundError } from "typeorm";
+import { authRequest } from "../types/auth";
 
 export class UserController extends Controller<UserRequest, UserResponse> {
     private userService = new UserService();
