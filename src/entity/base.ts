@@ -1,6 +1,5 @@
 import { BaseEntity, Column, CreateDateColumn, DeleteDateColumn, Entity, PrimaryGeneratedColumn, UpdateDateColumn } from "typeorm";
 
-@Entity()
 export class Base extends BaseEntity {
     @CreateDateColumn()
     created_at: Date;

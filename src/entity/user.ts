@@ -3,7 +3,7 @@ import { Base } from "./base";
 import { UserResponse } from "../types/userTypes";
 
 @Entity()
-export class User extends Base{
+export class User extends Base {
     @PrimaryGeneratedColumn()
     id: number;
 

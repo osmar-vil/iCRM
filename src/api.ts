@@ -1,12 +1,11 @@
 import bodyParser from "body-parser";
-import dotenv from "dotenv";
 import express, { Request, Response } from "express";
 import { AppDataSource } from "./db/datasource";
 import { errors } from "celebrate";
 
 import userRouter from "./routers/user.routers";
-
-dotenv.config();
+import { env } from "./validators/env.validator";
+import { seeder } from "./db/seeder";
 
 const api = express();
 
@@ -17,12 +16,14 @@ api.use("/user", userRouter)
 
 api.use( (req: Request, res: Response) => res.json({
     status: true,
-    API: process.env.API,
-    VERSION: process.env.VERSION,
+    API: env.API,
+    VERSION: env.VERSION,
 }));
 
 api.use(errors())
 
-AppDataSource.initialize().catch(error => console.error(error));
+AppDataSource.initialize()
+.then( () => seeder() )
+.catch(error => console.error(error));
 
-api.listen(process.env.PORT)
+api.listen(env.PORT)
