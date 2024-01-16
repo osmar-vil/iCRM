@@ -9,7 +9,10 @@ import { authRequest } from "../types/auth";
 
 export class UserService implements Service<UserRequest, UserResponse> {
     async create(data: UserRequest): Promise<UserResponse> {
-        const entity = User.create(data);
+        const entity = User.create({
+            ...data,
+            password: await bcryt.hash(data.password, 10)
+        });
         await User.insert(entity);
 
         return entity.response();
@@ -29,6 +32,8 @@ export class UserService implements Service<UserRequest, UserResponse> {
         return entity.response();
     }
     async update(id: number, data: UserRequest): Promise<UserResponse> {
+        if (data.password) data.password = await bcryt.hash(data.password, 10);
+
         await User.update(id, data);
         return this.getOne(id);
     }

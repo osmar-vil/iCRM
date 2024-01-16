@@ -16,4 +16,13 @@ export class UserValidator {
             password: Joi.string().trim().min(8).required(),
         }
     })
+
+    update = celebrate({
+        [Segments.BODY]: {
+            name: Joi.string().trim(),
+            last_name: Joi.string().trim(),
+            email: Joi.string().email(),
+            password: Joi.string().trim().min(8),
+        }
+    })
 }

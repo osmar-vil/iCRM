@@ -14,11 +14,30 @@ export class Controller <T, R> {
             return res.json({ data: await this.service.create(req.body) })
         } catch (error) { this.errorResponse(error, res); }
     }
-
     get = async (req: Request, res: Response) => {
         try {
             return res.json({ data: await this.service.get() })
-        } catch (error) { this.errorResponse(error, res); }
+        } catch (error) { return this.errorResponse(error, res); }
+    }
+    getOne = async (req: Request, res: Response) => {
+        try {
+            return res.json({ data: await this.service.getOne( Number(req.params.id) ) })
+        } catch (error) { return this.errorResponse(error, res); }
+    }
+    update = async (req: iRequestBody<T & { updated_by: number }>, res: Response) => {
+        req.body.updated_by = req.auth.id;
+        try {
+            return res.json({
+                data: await this.service.update( Number(req.params.id), req.body)
+            })
+        } catch (error) { return this.errorResponse(error, res); }
+    }
+    delete = async (req: Request, res: Response) => {
+        try {
+            return res.json({
+                data: await this.service.delete( Number(req.params.id), req.auth.id )
+            })
+        } catch (error) { return this.errorResponse(error, res); }
     }
 
     protected errorResponse (error: unknown, res: Response) {
