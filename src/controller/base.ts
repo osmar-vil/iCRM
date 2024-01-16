@@ -4,11 +4,12 @@ import { iRequestBody } from "../interfaces/express";
 import { EntityNotFoundError } from "typeorm";
 
 export class Controller <T, R> {
-    private service: Service<T,R>;
+    protected service: Service<T,R>;
 
     constructor(service: Service<T,R>) { this.service = service }
 
-    create = async (req: iRequestBody<T>, res: Response) => {
+    create = async (req: iRequestBody<T & { created_by: number }>, res: Response) => {
+        req.body.created_by = req.auth.id;
         try {
             return res.json({ data: await this.service.create(req.body) })
         } catch (error) { this.errorResponse(error, res); }
@@ -20,7 +21,7 @@ export class Controller <T, R> {
         } catch (error) { this.errorResponse(error, res); }
     }
 
-    errorResponse (error: unknown, res: Response) {
+    protected errorResponse (error: unknown, res: Response) {
         if (error instanceof EntityNotFoundError)
             return res.status(404).json({
                 message: "Can not found any entity with that data provided."

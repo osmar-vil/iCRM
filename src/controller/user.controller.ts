@@ -6,12 +6,11 @@ import { UserService } from "../service/user.service";
 import { authRequest } from "../types/auth";
 
 export class UserController extends Controller<UserRequest, UserResponse> {
-    private userService = new UserService();
-    constructor() { super(new UserService()) }
+    protected service = new UserService();
 
     auth = async (req: iRequestBody<authRequest>, res: Response) => {
         try {
-            return res.json({ data: await this.userService.auth(req.body) })
+            return res.json({ data: await this.service.auth(req.body) })
         } catch (error) { this.errorResponse(error, res) }
     }
 

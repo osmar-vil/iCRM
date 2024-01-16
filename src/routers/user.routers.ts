@@ -1,9 +1,10 @@
 import { Router } from "express";
 import { UserValidator } from "../validators/user.validator";
 import { UserController } from "../controller/user.controller";
+import { UserService } from "../service/user.service";
 
 const router = Router();
-const controller = new UserController();
+const controller = new UserController( new UserService() );
 const validator = new UserValidator();
 
 router.get("/", controller.get);
